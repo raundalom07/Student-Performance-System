@@ -1,5 +1,6 @@
 package com.om.backend.controller;
 
+import com.om.backend.dto.ApiResponse;
 import com.om.backend.model.Student;
 import com.om.backend.service.StudentService;
 import com.om.backend.dto.PredictionRequest;
@@ -12,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
-import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/students")
@@ -29,7 +30,6 @@ public class StudentController {
     public ResponseEntity<StudentResponseDTO> createStudent(
             @Valid @RequestBody StudentRequestDTO request) {
 
-        // Convert DTO → Entity
         Student student = new Student();
         student.setName(request.getName());
         student.setStudyHours(request.getStudyHours());
@@ -37,10 +37,8 @@ public class StudentController {
         student.setInternalMarks(request.getInternalMarks());
         student.setPreviousCgpa(request.getPreviousCgpa());
 
-        // Save to DB
         Student saved = studentService.saveStudent(student);
 
-        // Convert Entity → DTO
         StudentResponseDTO response = new StudentResponseDTO(
                 saved.getId(),
                 saved.getName(),
@@ -59,16 +57,32 @@ public class StudentController {
         return studentService.predictPerformance(request);
     }
 
-    // ===================== READ ALL =====================
+    // ===================== READ WITH PAGINATION =====================
     @GetMapping
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+    public ResponseEntity<ApiResponse<Page<Student>>> getStudents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy) {
+
+        Page<Student> studentsPage =
+                studentService.getStudentsWithPagination(page, size, sortBy);
+
+        ApiResponse<Page<Student>> response =
+                new ApiResponse<>(true, "Students fetched successfully", studentsPage);
+
+        return ResponseEntity.ok(response);
     }
 
     // ===================== READ BY ID =====================
     @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable Long id) {
-        return studentService.getStudentById(id);
+    public ResponseEntity<ApiResponse<Student>> getStudentById(@PathVariable Long id) {
+
+        Student student = studentService.getStudentById(id);
+
+        ApiResponse<Student> response =
+                new ApiResponse<>(true, "Student fetched successfully", student);
+
+        return ResponseEntity.ok(response);
     }
 
     // ===================== UPDATE =====================
@@ -83,8 +97,13 @@ public class StudentController {
 
     // ===================== DELETE =====================
     @DeleteMapping("/{id}")
-    public String deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteStudent(@PathVariable Long id) {
+
         studentService.deleteStudent(id);
-        return "Student deleted successfully";
+
+        ApiResponse<Void> response =
+                new ApiResponse<>(true, "Student deleted successfully", null);
+
+        return ResponseEntity.ok(response);
     }
 }

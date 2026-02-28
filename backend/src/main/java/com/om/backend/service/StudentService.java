@@ -4,9 +4,16 @@ import com.om.backend.model.Student;
 import com.om.backend.repository.StudentRepository;
 import com.om.backend.dto.PredictionRequest;
 import com.om.backend.dto.PredictionResponse;
+import com.om.backend.exception.ResourceNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.om.backend.exception.ResourceNotFoundException;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import java.util.List;
 
 @Service
@@ -28,11 +35,13 @@ public class StudentService {
     // ===================== READ BY ID =====================
     public Student getStudentById(Long id) {
         return studentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Student not found with id: " + id));
     }
 
     // ===================== UPDATE =====================
     public Student updateStudent(Long id, Student updatedStudent) {
+
         Student student = getStudentById(id);
 
         student.setName(updatedStudent.getName());
@@ -48,6 +57,14 @@ public class StudentService {
     public void deleteStudent(Long id) {
         Student student = getStudentById(id);
         studentRepository.delete(student);
+    }
+
+    // ===================== PAGINATION =====================
+    public Page<Student> getStudentsWithPagination(int page, int size, String sortBy) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+
+        return studentRepository.findAll(pageable);
     }
 
     // ===================== PREDICTION LOGIC =====================
