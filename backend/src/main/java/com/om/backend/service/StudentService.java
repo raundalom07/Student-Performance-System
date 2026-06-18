@@ -4,6 +4,7 @@ import com.om.backend.model.Student;
 import com.om.backend.repository.StudentRepository;
 import com.om.backend.dto.PredictionRequest;
 import com.om.backend.dto.PredictionResponse;
+import com.om.backend.dto.StudentResponseDTO;
 import com.om.backend.exception.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +34,15 @@ public class StudentService {
     }
 
     // ===================== READ BY ID =====================
-    public Student getStudentById(Long id) {
-        return studentRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Student not found with id: " + id));
+    public StudentResponseDTO getStudentById(Long id) {
+        Student student = findStudentEntity(id);
+        return convertToDTO(student);
     }
 
     // ===================== UPDATE =====================
     public Student updateStudent(Long id, Student updatedStudent) {
 
-        Student student = getStudentById(id);
+        Student student = findStudentEntity(id);
 
         student.setName(updatedStudent.getName());
         student.setAttendance(updatedStudent.getAttendance());
@@ -55,7 +55,7 @@ public class StudentService {
 
     // ===================== DELETE =====================
     public void deleteStudent(Long id) {
-        Student student = getStudentById(id);
+        Student student = findStudentEntity(id);
         studentRepository.delete(student);
     }
 
@@ -90,5 +90,24 @@ public class StudentService {
         }
 
         return new PredictionResponse(predictedScore, performanceLevel);
+    }
+    private StudentResponseDTO convertToDTO(Student student) {
+
+    return new StudentResponseDTO(
+            student.getId(),
+            student.getName(),
+            student.getStudyHours(),
+            student.getAttendance(),
+            student.getInternalMarks(),
+            student.getPreviousCgpa()
+        );
+    }
+    private Student findStudentEntity(Long id) {
+
+    return studentRepository.findById(id)
+            .orElseThrow(() ->
+                    new ResourceNotFoundException(
+                            "Student not found with id: " + id
+                    ));
     }
 }

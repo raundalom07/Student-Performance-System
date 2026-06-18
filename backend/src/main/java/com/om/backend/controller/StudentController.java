@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.data.domain.Page;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import jakarta.validation.Valid;
 
 @RestController
@@ -75,11 +75,11 @@ public class StudentController {
 
     // ===================== READ BY ID =====================
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Student>> getStudentById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<StudentResponseDTO>> getStudentById(@PathVariable Long id) {
 
-        Student student = studentService.getStudentById(id);
+        StudentResponseDTO student = studentService.getStudentById(id);
 
-        ApiResponse<Student> response =
+        ApiResponse<StudentResponseDTO> response =
                 new ApiResponse<>(true, "Student fetched successfully", student);
 
         return ResponseEntity.ok(response);
@@ -96,6 +96,7 @@ public class StudentController {
     }
 
     // ===================== DELETE =====================
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteStudent(@PathVariable Long id) {
 

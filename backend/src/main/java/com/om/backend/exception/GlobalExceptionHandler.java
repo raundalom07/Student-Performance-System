@@ -9,11 +9,33 @@ import org.springframework.validation.FieldError;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.security.access.AccessDeniedException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // ===================== 404 =====================
+        @ExceptionHandler(AccessDeniedException.class)
+        public ResponseEntity<Map<String, Object>> handleAccessDenied(
+                        AccessDeniedException ex) {
+
+                Map<String, Object> error = new HashMap<>();
+
+                error.put("timestamp", LocalDateTime.now());
+                error.put("status", 403);
+                error.put("error", "Forbidden");
+                error.put("message", ex.getMessage());
+
+                return new ResponseEntity<>(
+                        error,
+                        HttpStatus.FORBIDDEN
+                );
+        }
+
+
+
+
+    
+        // ===================== 404 =====================
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(
             ResourceNotFoundException ex) {
