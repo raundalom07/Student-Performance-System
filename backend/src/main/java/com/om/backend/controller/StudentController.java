@@ -18,7 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/api/v1/students")
 @CrossOrigin
 public class StudentController {
 
