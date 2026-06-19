@@ -2,6 +2,9 @@ package com.om.backend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "students")
@@ -35,6 +38,13 @@ public class Student {
     @DecimalMax(value = "10.0", message = "CGPA cannot exceed 10")
     private Double previousCgpa;
 
+    
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
     // ===== Constructors =====
 
     public Student() {
@@ -74,6 +84,13 @@ public class Student {
 
     public Double getPreviousCgpa() {
         return previousCgpa;
+    }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     public void setId(Long id) {
