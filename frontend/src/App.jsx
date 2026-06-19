@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -14,14 +15,24 @@ function App() {
 
       <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/students" element={<Students />} />
-        <Route path="/predict" element={<Predict />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <div className="d-flex">
+
+        <Sidebar />
+
+        <div className="flex-grow-1 p-4">
+
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/students" element={<Students />} />
+            <Route path="/predict" element={<Predict />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+
+        </div>
+
+      </div>
 
     </BrowserRouter>
   );
