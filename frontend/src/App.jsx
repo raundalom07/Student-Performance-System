@@ -1,9 +1,29 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Students from "./pages/Students";
+import Predict from "./pages/Predict";
+import NotFound from "./pages/NotFound";
+
 function App() {
   return (
-    <div>
-      <h1>Student Performance Prediction System</h1>
-      <h3>Frontend Day 1 Setup Complete 🚀</h3>
-    </div>
+    <BrowserRouter>
+
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/students" element={<Students />} />
+        <Route path="/predict" element={<Predict />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+
+    </BrowserRouter>
   );
 }
 
