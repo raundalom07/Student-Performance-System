@@ -9,6 +9,8 @@ import Students from "./pages/Students";
 import Predict from "./pages/Predict";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AddStudent from "./pages/AddStudent";
+
 
 function Layout() {
   const location = useLocation();
@@ -49,6 +51,15 @@ function Layout() {
               element={
                 <ProtectedRoute>
                   <Students />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/add-student"
+              element={
+                <ProtectedRoute>
+                  <AddStudent />
                 </ProtectedRoute>
               }
             />

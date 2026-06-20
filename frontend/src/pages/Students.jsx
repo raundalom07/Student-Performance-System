@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { getStudents } from "../services/studentService";
+import { useNavigate } from "react-router-dom";
 
-function Students() {
-
+function Students() 
+{
+  
+  const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,46 +38,49 @@ function Students() {
   }
 
   return (
-  <div className="container mt-4">
+    <div className="container mt-4">
 
-    <div className="d-flex justify-content-between mb-3">
-      <h2>Students List</h2>
+      <div className="d-flex justify-content-between mb-3">
+        <h2>Students List</h2>
 
-      <button className="btn btn-primary">
-        Add Student
-      </button>
-    </div>
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate("/add-student")}
+        >
+          Add Student
+        </button>
+      </div>
 
-    <table className="table table-bordered table-striped shadow">
+      <table className="table table-bordered table-striped shadow">
 
-        <thead className="table-dark">
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Attendance</th>
-            <th>Internal Marks</th>
-            <th>Previous CGPA</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          {students.map((student) => (
-            <tr key={student.id}>
-              <td>{student.id}</td>
-              <td>{student.name}</td>
-              <td>{student.attendance}%</td>
-              <td>{student.internalMarks}</td>
-              <td>{student.previousCgpa}</td>
+          <thead className="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Attendance</th>
+              <th>Internal Marks</th>
+              <th>Previous CGPA</th>
             </tr>
-          ))}
+          </thead>
 
-        </tbody>
+          <tbody>
 
-      </table>
+            {students.map((student) => (
+              <tr key={student.id}>
+                <td>{student.id}</td>
+                <td>{student.name}</td>
+                <td>{student.attendance}%</td>
+                <td>{student.internalMarks}</td>
+                <td>{student.previousCgpa}</td>
+              </tr>
+            ))}
 
-    </div>
-  );
-}
+          </tbody>
+
+        </table>
+
+      </div>
+    );
+  }
 
 export default Students;
