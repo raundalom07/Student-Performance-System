@@ -2,11 +2,20 @@ import { useState } from "react";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+import { useEffect } from "react";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
+
 
 const handleSubmit = async (e) => {
   e.preventDefault();

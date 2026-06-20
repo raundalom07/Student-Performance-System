@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  }
+
   return (
     <div
       className="bg-dark text-white p-3"
@@ -29,10 +36,12 @@ function Sidebar() {
           </Link>
         </li>
 
-        <li className="nav-item">
-          <Link className="nav-link text-white" to="/login">
-            Logout
-          </Link>
+        <li
+          className="nav-item"
+          onClick={handleLogout}
+          style={{ cursor: "pointer" }}
+        >
+          Logout
         </li>
       </ul>
     </div>

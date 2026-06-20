@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
 import Predict from "./pages/Predict";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function Layout() {
   const location = useLocation();
@@ -34,14 +35,38 @@ function Layout() {
 
         <div className="flex-grow-1 p-4">
           <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/students" element={<Students />} />
-            <Route path="/predict" element={<Predict />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/students"
+              element={
+                <ProtectedRoute>
+                  <Students />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/predict"
+              element={
+                <ProtectedRoute>
+                  <Predict />
+                </ProtectedRoute>
+              }
+            />
+
             <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
+        </Routes>
       </div>
-    </>
+    </div>
+  </>
   );
 }
 
